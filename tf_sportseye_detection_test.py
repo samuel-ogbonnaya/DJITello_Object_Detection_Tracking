@@ -1,12 +1,5 @@
 # -*- coding: utf-8 -*-
 """
-Created on Mon Feb 10 19:56:29 2020
-
-@author: isogb
-"""
-
-# -*- coding: utf-8 -*-
-"""
 Created on Tue Jan 21 00:32:06 2020
 
 @author: isogb
@@ -35,8 +28,7 @@ cap = cv2.VideoCapture(0)  # Change only if you have more than one webcams
 # What model to download.
 # Models can bee found here: https://github.com/tensorflow/models/blob/master/research/object_detection/g3doc/detection_model_zoo.md
 MODEL_NAME = 'trained_inference_graphs'
-#MODEL_FILE = MODEL_NAME + '.tar.gz'
-#DOWNLOAD_BASE = 'http://download.tensorflow.org/models/object_detection/'
+
 
 # Grab path to current working directory
 CWD_PATH = os.getcwd()
@@ -49,17 +41,6 @@ PATH_TO_LABELS = os.path.join(CWD_PATH,'training','label_map.pbtxt')
 
 # Number of classes to detect
 NUM_CLASSES = 1
-
-'''
-# Download Model
-opener = urllib.request.URLopener()
-opener.retrieve(DOWNLOAD_BASE + MODEL_FILE, MODEL_FILE)
-tar_file = tarfile.open(MODEL_FILE)
-for file in tar_file.getmembers():
-    file_name = os.path.basename(file.name)
-    if 'frozen_inference_graph.pb' in file_name:
-        tar_file.extract(file, os.getcwd())
-'''
 
 
 # Load a (frozen) Tensorflow model into memory.
@@ -79,13 +60,6 @@ categories = label_map_util.convert_label_map_to_categories(
     label_map, max_num_classes=NUM_CLASSES, use_display_name=True)
 category_index = label_map_util.create_category_index(categories)
 
-'''
-# Helper code
-def load_image_into_numpy_array(image):
-    (im_width, im_height) = image.size
-    return np.array(image.getdata()).reshape(
-        (im_height, im_width, 3)).astype(np.uint8)
-'''
 
 # Detection
 with detection_graph.as_default():
