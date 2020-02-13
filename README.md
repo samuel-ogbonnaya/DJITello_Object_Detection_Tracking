@@ -5,4 +5,6 @@ The aim of this project is to develop and deploy AI software deployed on a drone
 
 The intial software has been developed using a generic YOLOv3 object detection algorithm and this has been integrated with multiple object tracking algorithms such as GOTURN, CRST, MOSSE etc.
 
-A custom faster R-CNN model has been trained using Tensorflow and a custome dataset to detect footballs for the initlal application
+A custom faster R-CNN model has been trained using Tensorflow and a custome dataset to detect footballs for the initlal application.
+
+Hardware integration into a DJI dron is WIP
