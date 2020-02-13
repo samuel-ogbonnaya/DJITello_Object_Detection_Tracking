@@ -7,4 +7,4 @@ The intial software has been developed using a generic YOLOv3 object detection a
 
 A custom faster R-CNN model has been trained using Tensorflow and a custome dataset to detect footballs for the initlal application.
 
-Hardware integration into a DJI dron is WIP
+Hardware integration into a DJI drone is Work-In-Progress
