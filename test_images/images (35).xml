@@ -1,0 +1,26 @@
+<annotation>
+	<folder>test</folder>
+	<filename>images (35).jpg</filename>
+	<path>C:\Users\isogb\Documents\Computer Vision\TensorFlow\workspace\training_demo\images\test\images (35).jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>284</width>
+		<height>177</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>football</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>112</xmin>
+			<ymin>145</ymin>
+			<xmax>140</xmax>
+			<ymax>169</ymax>
+		</bndbox>
+	</object>
+</annotation>
