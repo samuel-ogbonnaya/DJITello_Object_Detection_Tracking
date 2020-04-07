@@ -34,7 +34,7 @@ elif tracker_type == "CSRT":
     tracker = cv2.TrackerCSRT_create()
 
 
-# Implement detector algorithm to detect a ball (object) and store output in bounding box:
+# Implement YOLO detector algorithm to detect a ball (object) and store output in bounding box:
 def ball_detector():
     net = cv2.dnn.readNet("yolov3.weights", "yolov3.cfg")
     classes = []
@@ -46,8 +46,9 @@ def ball_detector():
     
     # Capture frame from webcam:
     #ret, img = capture.read()
+    #frame = cv2.resize(frame, None, fx=0.4, fy=0.4) 
+    
     global frame
-    #frame = cv2.resize(frame, None, fx=0.4, fy=0.4)  #need to understand this line 
     height, width, channels = frame.shape
 
     # Detecting objects
@@ -130,7 +131,7 @@ while True:
             object_detected = False
       
     
-    if object_detected is True: ##if we have detected an object
+    if object_detected is True: #if we have detected an object
 
         print('object_detected = {}'.format(object_detected))
 
@@ -174,6 +175,3 @@ while True:
     if key == ord('q'):
         video.release()
         cv2.destroyAllWindows()
-
-
-#sched.shutdown()
