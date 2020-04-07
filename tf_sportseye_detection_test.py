@@ -9,8 +9,8 @@ import numpy as np
 import os
 import six.moves.urllib as urllib
 import sys
-sys.path.append('C:/Users/isogb/Documents/Computer_Vision/TensorFlow/models/slim') # point to your tensorflow dir
-sys.path.append('C:/Users/isogb/Documents/Computer_Vision/TensorFlow/models') # point ot your slim dir
+sys.path.append('C:/Users/isogb/Documents/Computer_Vision/TensorFlow/models/slim') # point to tensorflow dir
+sys.path.append('C:/Users/isogb/Documents/Computer_Vision/TensorFlow/models') # point to slim dir
 import tarfile
 import tensorflow as tf
 import zipfile
@@ -23,17 +23,17 @@ from utils import label_map_util
 from utils import visualization_utils as vis_util
 
 # Define the video stream
-cap = cv2.VideoCapture(0)  # Change only if you have more than one webcams
+cap = cv2.VideoCapture(0)  # Capture video from Webcam
 
-# What model to download.
-# Models can bee found here: https://github.com/tensorflow/models/blob/master/research/object_detection/g3doc/detection_model_zoo.md
+
+# Models can be found here: https://github.com/tensorflow/models/blob/master/research/object_detection/g3doc/detection_model_zoo.md
 MODEL_NAME = 'trained_inference_graphs'
 
 
 # Grab path to current working directory
 CWD_PATH = os.getcwd()
 
-# Path to frozen detection graph. This is the actual model that is used for the object detection.
+# Path to frozen detection graph. This is the model that is used for the object detection.
 PATH_TO_CKPT = os.path.join(CWD_PATH,MODEL_NAME,'sportseye_v1_inference_graph.pb')
 
 # List of the strings that is used to add correct label for each box.
@@ -43,7 +43,7 @@ PATH_TO_LABELS = os.path.join(CWD_PATH,'training','label_map.pbtxt')
 NUM_CLASSES = 1
 
 
-# Load a (frozen) Tensorflow model into memory.
+# Load the (frozen) Tensorflow model into memory.
 detection_graph = tf.Graph()
 with detection_graph.as_default():
     od_graph_def = tf.GraphDef()
@@ -54,7 +54,8 @@ with detection_graph.as_default():
 
 
 # Loading label map
-# Label maps map indices to category names, so that when our convolution network predicts `5`, we know that this corresponds to `airplane`.  Here we use internal utility functions, but anything that returns a dictionary mapping integers to appropriate string labels would be fine
+# Label maps map indices to category names. 
+# Here we use internal utility functions.
 label_map = label_map_util.load_labelmap(PATH_TO_LABELS)
 categories = label_map_util.convert_label_map_to_categories(
     label_map, max_num_classes=NUM_CLASSES, use_display_name=True)
