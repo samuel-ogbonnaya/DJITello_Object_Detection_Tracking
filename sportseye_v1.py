@@ -9,8 +9,8 @@ import cv2
 import numpy as np
 import os
 import sys
-sys.path.append('C:/Users/isogb/Documents/Computer_Vision/TensorFlow/models/slim') # points to Tensorflow slim dir
-sys.path.append('C:/Users/isogb/Documents/Computer_Vision/TensorFlow/models') # points to Tensorflow models dir
+sys.path.append('C:/Users/isogb/Documents/Computer_Vision/TensorFlow/models/slim') # point to your tensorflow dir
+sys.path.append('C:/Users/isogb/Documents/Computer_Vision/TensorFlow/models') # point ot your slim dir
 import tensorflow as tf
 from utils import label_map_util
 from utils import visualization_utils as vis_util
@@ -72,7 +72,6 @@ class Sportseye:
                     # Actual detection.
                     (self.boxes, self.scores, self.classes, self.num_detections) = sess.run([self.boxes, self.scores, self.classes, self.num_detections],feed_dict={ self.image_tensor: self.image_np_expanded})
                     
-                    #self.display_bounding_box()
                     self.coord = self.bounding_box_coordinates()
                     
                     if self.coord: # if object detected
@@ -83,7 +82,6 @@ class Sportseye:
                     
     def display_bounding_box(self, image):
         self.image_np = image
-        '''
         return vis_util.visualize_boxes_and_labels_on_image_array(
                         self.image_np,
                         np.squeeze(self.boxes),
@@ -93,19 +91,7 @@ class Sportseye:
                         use_normalized_coordinates=True,
                         line_thickness=8,
                         min_score_thresh=0.9)
-        '''
-        ymin, xmin, ymax, xmax = self.coord[0]
-        vis_util.draw_bounding_box_on_image_array(self.image_np,
-                                     ymin,
-                                     xmin,
-                                     ymax,
-                                     xmax,
-                                     color='red',
-                                     thickness=4,
-                                     display_str_list=(),
-                                     use_normalized_coordinates=True)
-    
-  
+     
     def bounding_box_coordinates(self):
         
         ## need try and exception here e.g if min(scores) < 90 then throw error
@@ -117,7 +103,7 @@ class Sportseye:
                         self.category_index,
                         use_normalized_coordinates=True,
                         line_thickness=8,
-                        min_score_thresh=0.85)
+                        min_score_thresh=0.95)
         return self.coordinates
 
     def yolo_detector():
@@ -147,15 +133,20 @@ class Sportseye:
         elif  self.tracker_type == "CSRT":
              self.tracker = cv2.TrackerCSRT_create()
         
+        # Tracking intialisation 
+        self.bounding_box = None
+        tracking = False
+        
         self.bbox = tuple(self.TFdetector()[0])
-        # converts detcted output into correct format for tracker intialisation
+        
+        # Converts Tensorflow object detctor output into correct format for tracker intialisation
         x = self.bbox[2]
         y = self.bbox[0]
         w = self.bbox[3]-self.bbox[2]
         h = self.bbox[1]-self.bbox[0]
+        
         self.bounding_box = (x, y, w, h)
         self.tracker.init(self.image_np, self.bounding_box)
-        tracking = False
 
         while True:
             
@@ -167,15 +158,29 @@ class Sportseye:
             
             # Check if an object has been detected
             if self.bounding_box is None and tracking is False:
-                print('object not detected intially')
-                self.bounding_box = tuple(self.TFdetector()[0]) #try re-detect an object 3 times or raise exception
+                print('object not detected')
+                
+                #Attempt Re-detection - Should use try and exception here (for loop retry count), else raise exception
+                self.bbox = tuple(self.TFdetector()[0])
+                x = self.bbox[2]
+                y = self.bbox[0]
+                w = self.bbox[3]-self.bbox[2]
+                h = self.bbox[1]-self.bbox[0] 
+                self.bounding_box = (x, y, w, h)
+                self.tracker.init(self.image_np, self.bounding_box)
+                
+                if self.bounding_box:
+                    print('object re-detected')
+                else:
+                    print('object not detected again')
+                    break
             else:
                 tracking = True
                       
             if tracking:
                 # Update tracker
                 self.status, self.bbox = self.tracker.update(self.image_np)
-                print(self.bbox)
+                # print(self.bbox)
                 
                 # Draw bounding box
                 if self.status:
@@ -205,29 +210,14 @@ class Sportseye:
                     
                     # will need try and exception here
                     
-                    '''
-                    # Display tracker type on frame
-                    cv2.putText(self.image_np, self.tracker_type + " Tracker", (100,20), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (50,170,50),2);
-         
-                    # Display result
-                    cv2.imshow(" Not Tracking",cv2.resize(self.image_np, (800, 600)))
-                    
-                    if cv2.waitKey(25) & 0xFF == ord('q'):
-                        self.cap.release()
-                        cv2.destroyAllWindows()
-                        break
-                    
-                    '''
- 
     def DroneController(self):
         pass
-
 
 
 def main():
     cap = cv2.VideoCapture(0)
     sportseye = Sportseye(cap)
-    sportseye.ObjectTracking(4)
+    sportseye.ObjectTracking(7)
     #  tested with 4, 6 & 7 , all work 7 seems to be best soo far
     #  2 is temperamental but shows that algorithm works i.e when detection fails midtracking, can re-detect and continue
 
