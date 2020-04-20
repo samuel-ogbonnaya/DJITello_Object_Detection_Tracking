@@ -171,6 +171,7 @@ class Sportseye:
                 
                 if self.bounding_box:
                     print('object re-detected')
+                    tracking = True
                 else:
                     print('object not detected again')
                     break
