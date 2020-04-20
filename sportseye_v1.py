@@ -9,8 +9,8 @@ import cv2
 import numpy as np
 import os
 import sys
-sys.path.append('C:/Users/isogb/Documents/Computer_Vision/TensorFlow/models/slim') # point to your tensorflow dir
-sys.path.append('C:/Users/isogb/Documents/Computer_Vision/TensorFlow/models') # point ot your slim dir
+sys.path.append('C:/Users/isogb/Documents/Computer_Vision/TensorFlow/models/slim') # points to Tensorflow slim dir
+sys.path.append('C:/Users/isogb/Documents/Computer_Vision/TensorFlow/models') # points to Tensorflow models dir
 import tensorflow as tf
 from utils import label_map_util
 from utils import visualization_utils as vis_util
