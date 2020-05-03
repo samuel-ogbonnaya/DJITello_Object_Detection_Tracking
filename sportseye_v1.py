@@ -14,18 +14,31 @@ sys.path.append('C:/Users/isogb/Documents/Computer_Vision/TensorFlow/models') # 
 import tensorflow as tf
 from utils import label_map_util
 from utils import visualization_utils as vis_util
+import time
           
 class Sportseye:
+    
     # Number of classes to detect
     NUM_CLASSES = 1
     MODEL_NAME = 'trained_inference_graphs'   
+    
     # Grab path to current working directory
     CWD_PATH = os.getcwd()
     
-    def __init__ (self, cap, retry_count = 3):
-        self.cap = cap
+    def __init__ (self, retry_count = 2):
+        self.tello = Tello()
+        self.tello.connect()
+        self.tello.streamon()
+        
+        #Webcam 
+        #self.cap = cv2.VideoCapture(0)
+        
         self.retry_count = retry_count
-
+        self.left_right = 0
+        self.for_back = 0
+        self.up_down = 0
+        self.yaw = 0
+        
     def TFdetector(self):    
         
         # Path to frozen detection graph. This is the actual model that is used for the object detection.
@@ -53,8 +66,17 @@ class Sportseye:
         with self.detection_graph.as_default():
             with tf.Session(graph=self.detection_graph) as sess:
                 while counter < self.retry_count:  # set to a counter e.g try and detect ball maximum of three time, by checking of coordinate output is empty or not
-                    # Read frame from camera
-                    self.ret, self.image_np = self.cap.read()
+                   
+                    # Read frame from Webcam
+                    #self.ret, self.image_np = self.cap.read()
+                    
+                    #Read frame from Drone  
+                    self.image_np  = self.tello.get_frame_read().frame
+                    self.ret = self.tello.get_frame_read().grabbed
+
+                    if not self.ret:
+                        break
+                    
                     # Expand dimensions since the model expects images to have shape: [1, None, None, 3]
                     self.image_np_expanded = np.expand_dims(self.image_np, axis=0)
                     # Extract image tensor
@@ -103,7 +125,7 @@ class Sportseye:
                         self.category_index,
                         use_normalized_coordinates=True,
                         line_thickness=8,
-                        min_score_thresh=0.95)
+                        min_score_thresh=0.9)
         return self.coordinates
 
     def yolo_detector():
@@ -111,6 +133,7 @@ class Sportseye:
     
 
     def ObjectTracking(self, selection):
+        
         # Set up trackers.
         self.selection = selection
         tracker_types = ['BOOSTING', 'MIL','KCF', 'TLD', 'MEDIANFLOW', 'GOTURN', 'MOSSE', 'CSRT']
@@ -133,7 +156,13 @@ class Sportseye:
         elif  self.tracker_type == "CSRT":
              self.tracker = cv2.TrackerCSRT_create()
         
-        # Tracking intialisation 
+       
+        #Take-off
+        print('taking-off')
+        self.tello.takeoff()
+        time.sleep(4)
+        
+       # Tracking intialisation 
         self.bounding_box = None
         tracking = False
         
@@ -147,15 +176,22 @@ class Sportseye:
         
         self.bounding_box = (x, y, w, h)
         self.tracker.init(self.image_np, self.bounding_box)
+        attempts = 0
 
         while True:
             
-            # Read a new frame
-            self.ret, self.image_np = self.cap.read()
+            self.update_position()
+                    
+            # Read a new frame from Webcam
+            #self.ret, self.image_np = self.cap.read()
+            
+            #  Read a new frame from Drone
+            self.image_np  = self.tello.get_frame_read().frame
+            self.ret = self.tello.get_frame_read().grabbed
             
             if not self.ret:
                 break
-            
+        
             # Check if an object has been detected
             if self.bounding_box is None and tracking is False:
                 print('object not detected')
@@ -169,25 +205,47 @@ class Sportseye:
                 self.bounding_box = (x, y, w, h)
                 self.tracker.init(self.image_np, self.bounding_box)
                 
-                if self.bounding_box:
-                    print('object re-detected')
+                if self.bounding_box is not None and sum(list(self.bounding_box)) > 1:
+                    print('object re-detected 1')
                     tracking = True
                 else:
-                    print('object not detected again')
+                    print('object not detected again 1')
                     break
             else:
                 tracking = True
                       
             if tracking:
+                
                 # Update tracker
                 self.status, self.bbox = self.tracker.update(self.image_np)
-                # print(self.bbox)
+                print(self.bbox)
+                #print(self.status)
+                #print(self.image_np.shape)
                 
-                # Draw bounding box
-                if self.status:
+              
+                # Draw bounding box if tracker has updated
+                if self.status and sum(list(self.bbox)) != 0:
                     p1 = (int(self.bbox[0]), int(self.bbox[1]))
                     p2 = (int(self.bbox[0] + self.bbox[2]), int(self.bbox[1] + self.bbox[3]))
-                    cv2.rectangle(self.image_np, p1, p2, (255,0,0), 2, 1)
+                    
+                    #Bounding Box
+                    cv2.rectangle(self.image_np, p1, p2, (255,0,0), 2, 1) 
+                    
+                    # Centre of frame/Drone
+                    self.drone_vector = (int(self.image_np.shape[1]/2), int(self.image_np.shape[0]/2))
+                    cv2.circle(self.image_np, (self.drone_vector), 10, (255,0,0), 2)
+                    
+                    # Centre of Bounding Box
+                    self.object_vector = int((self.bbox[0]) + (self.bbox[2]/2)), int((self.bbox[1]) + (self.bbox[3]/2))
+                    cv2.circle(self.image_np, (self.object_vector), 10, (255,255,0), 2)
+                    
+                    
+                    self.deficit_vector = (self.drone_vector[0] - self.object_vector[0], self.drone_vector[1] - self.object_vector[1])
+                    print(self.deficit_vector)
+                    
+                    
+                    # Drone Controller function
+                    self.DroneController()
 
                     # Tracking Success
                     cv2.putText(self.image_np, "Tracking Success", (100,80), cv2.FONT_HERSHEY_SIMPLEX, 0.75,(0,0,255),2)
@@ -199,28 +257,96 @@ class Sportseye:
                     cv2.imshow('object Tracking', cv2.resize(self.image_np, (800, 600)))
 
                     if cv2.waitKey(25) & 0xFF == ord('q'):
-                        self.cap.release()
+                        #self.cap.release()
                         cv2.destroyAllWindows()
                         break
+                
+                elif sum(list(self.bbox)) < 1:
+                    #Attempt Re-detection - Should use try and exception here (for loop retry count), else raise exception
+                    self.bbox = tuple(self.TFdetector()[0])
+                    x = self.bbox[2]
+                    y = self.bbox[0]
+                    w = self.bbox[3]-self.bbox[2]
+                    h = self.bbox[1]-self.bbox[0] 
+                    self.bounding_box = (x, y, w, h)
+                    self.tracker.init(self.image_np, self.bounding_box)
+                    
+                    print(sum(list(self.bounding_box)))
+                    
+                    if sum(list(self.bounding_box)) > 1:
+                        print('object re-detected 2')
+                        tracking = True
+                    else:
+                        print('object not detected again 2')
+                        attempts += 1
+                        while attempts == self.retry_count:
+                            break
                 else :
-                    tracking = False
-                    self.bounding_box = None
-                    
                     # Tracking failure
+                    print('tracking failure')
                     cv2.putText(self.image_np, "Tracking failure detected", (100,80), cv2.FONT_HERSHEY_SIMPLEX, 0.75,(0,0,255),2)
-                    
-                    # will need try and exception here
-                    
+                    break
+                    # will need try and exception here with retry count
+                                     
+        self.tello.streamoff()
+        print("Landing")
+        self.tello.land() 
+        self.tello.end()
+
+        
     def DroneController(self):
-        pass
+        
+        if self.deficit_vector[0] > 150: # if the x vector is positive (i.e. to the left of the drone, then pan drone right)
+            print('yaw_right')
+            self.yaw = 20 #yaw right
+        
+        elif self.deficit_vector[0] < -150:
+            print('yaw_left')
+            self.yaw = -20 #yaw left
+
+        else:
+            self.yaw = 0 #do nothing
+         
+            
+        if self.deficit_vector[1] > 150: # if the y vector is positive (i.e. above the drone, then move drone down)
+            print('move_down')
+            self.up_down = -20 #move down 
+            
+        elif self.deficit_vector[1] < -150:
+            print('move_up')
+            self.up_down = 20 #move up 
+   
+        else:
+            self.up_down = 0 #do nothing
+    
+    
+    def update_position(self):
+        
+        '''
+        Send RC control via four channels. Command is sent every self.TIME_BTW_RC_CONTROL_COMMANDS seconds.
+        Arguments:
+            left_right_velocity: -100~100 (left/right)
+            forward_backward_velocity: -100~100 (forward/backward)
+            up_down_velocity: -100~100 (up/down)
+            yaw_velocity: -100~100 (yaw)
+        Returns:
+            bool: True for successful, False for unsuccessful
+        '''
+    
+        self.tello.send_rc_control(self.left_right, self.for_back, self.up_down,
+                                       self.yaw)
 
 
 def main():
-    cap = cv2.VideoCapture(0)
-    sportseye = Sportseye(cap)
-    sportseye.ObjectTracking(7)
-    #  tested with 4, 6 & 7 , all work 7 seems to be best soo far
-    #  2 is temperamental but shows that algorithm works i.e when detection fails midtracking, can re-detect and continue
+    
+    sportseye = Sportseye()
+    sportseye.ObjectTracking(6)
 
+    ''' 
+    Tested with trackers 4, 6 & 7 , all work 7 seems to be best soo far
+    2 is temperamental but shows that algorithm works i.e when detection fails midtracking, can re-detect and continue
+    '''
+    
+    
 if __name__ == '__main__':
     main()
