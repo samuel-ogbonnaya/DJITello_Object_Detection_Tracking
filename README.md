@@ -8,3 +8,10 @@ The intial application was developed using a generic YOLOv3 object detection alg
 The application was updated to utilise a custom faster R-CNN model, the model was trained using Tensorflow and a custom dataset to detect footballs for the initlal application. Labelimg was used for labelling the training and test dataset images.
 
 
+# Requirements
+TensorFlow Object Detection API
+Python 3.6.10
+OpenCV 4
+DJI Tello Drone
+
+
