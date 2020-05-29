@@ -23,11 +23,11 @@ Tested with Python 3.6, but it also may be compatabile with other versions.
 # Limtiations
 The camera on the Tello Drone is fixed and therefore the drone cannot see underneath itself. This limits the field of vision of tracking.
 
-There is no access to drone control during takeoff, therefore the user has to ensure the ball is still in frame during the take-off routin to ensure tacking is successfully intialised.
+There is no access to drone control during takeoff, therefore the user has to ensure the ball is still in frame during the take-off routine to ensure tracking is successfully intialised.
 
 # Next Steps
-There next key step is obtaining better hardware i.e. Drone with camera gimbal for tilting.
-Faile safe etc will have to be incorporated into the application
+Thee next key step is obtaining better hardware i.e. Drone with camera gimbal for tilting.
+Fail safes etc will have to be incorporated into the application
 
 # Author
 Sam Ogbonnaya
