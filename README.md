@@ -14,7 +14,7 @@ Tested with Python 3.6, but it also may be compatabile with other versions.
 - TensorFlow Object Detection API
 - Python >= 3.6
 - OpenCV 4
-- [DJI Tello Drone] (https://store.dji.com/uk/shop/tello-series)
+- [DJI Tello Drone](https://store.dji.com/uk/shop/tello-series)
 
 ## Usage
 - Install and train you object detection model using instruction from [here](https://tensorflow-object-detection-api-tutorial.readthedocs.io/en/latest/training.html#)
