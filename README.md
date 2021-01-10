@@ -1,4 +1,4 @@
-# Computer Vision Project for detecting and tracking sports objects e.g footballs
+# Computer Vision Project for detecting and tracking footballs
 
 The aim of this project is to develop and deploy AI software on the DJI Tello drone to enable it to automatically detect and track footballs
 
