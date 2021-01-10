@@ -2,11 +2,11 @@
 
 The aim of this project is to develop and deploy AI software on the DJI Tello drone to enable it to automatically detect and track footballs
 
-The intial application was developed using a generic YOLOv3 object detection algorithm and this has been integrated with multiple object tracking algorithms such as GOTURN, CRST, MOSSE etc.
-
-The application was updated to utilise a custom faster R-CNN model, the model was trained using Tensorflow Object Detction API and a custom dataset to detect footballs for the initlal application. Labelimg was used for labelling the training and test dataset images.
-
-The detector algorithms has been integrated with tracking algorithm and a controller algorithm created for altering the drone movements accordingly.
++ The initial application was developed using a generic YOLOv3 object detection algorithm and this has been integrated with multiple object tracking algorithms such as GOTURN, CRST, MOSSE etc.
++ The application was updated to utilise a custom faster R-CNN model, the model was trained using Tensorflow Object Detction API and a custom dataset to detect footballs for the initlal application. 
++ Labelimg was used for labelling the training and test dataset images.
++ I also added an additional function in the visualisation_utils.py scripts from the tensorflow object detection API
++ The detector algorithms has been integrated with tracking algorithm and a controller algorithm created for altering the drone movements accordingly.
 
 Tested with Python 3.6, but it also may be compatabile with other versions.
 
@@ -17,7 +17,8 @@ Tested with Python 3.6, but it also may be compatabile with other versions.
 - [DJI Tello Drone](https://store.dji.com/uk/shop/tello-series)
 
 ## Usage
-- Install and train you object detection model using instruction from [here](https://tensorflow-object-detection-api-tutorial.readthedocs.io/en/latest/training.html#)
+- Install and train your object detection model using instruction from [here](https://tensorflow-object-detection-api-tutorial.readthedocs.io/en/latest/training.html#)
+- Add in the follwoing function into the visualisation_utils.py in the utils folder of the TF API.
 - Connect to the a tello drone via wifi
 - Ensure the ball is in front of the tello drone camera before take-off
 - Run the main.py script
