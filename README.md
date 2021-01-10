@@ -135,14 +135,14 @@ def return_coordinates(
 
 ## Demo
 
-## Limtiations
+## Limtations
 - The camera on the Tello Drone is fixed and therefore the drone cannot see underneath itself. This limits the field of vision of tracking.
 - There is no access to drone control during takeoff, therefore the user has to ensure the ball is still in frame during the take-off routine to ensure tracking is successfully intialised.
 
 ## Next Steps
 - The next key step is obtaining better hardware i.e. Drone with camera gimbal for tilting.
 - Fail safes etc will have to be incorporated into the application
-- See this [project](Test drone controller capabilities (take-off, landing etc) using Olympe)
+- See this [project](https://github.com/samuel-ogbonnaya/ParrotAnafi_ComputerVision)
 
 ## Resources
 Thanks to Damia Fuentes for his [Tello SDK](https://github.com/damiafuentes/DJITelloPy)
