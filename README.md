@@ -135,7 +135,7 @@ def return_coordinates(
 
 ## Demo
 
-## Limtations
+## Limitations
 - The camera on the Tello Drone is fixed and therefore the drone cannot see underneath itself. This limits the field of vision of tracking.
 - There is no access to drone control during takeoff, therefore the user has to ensure the ball is still in frame during the take-off routine to ensure tracking is successfully intialised.
 
