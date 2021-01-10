@@ -11,10 +11,13 @@ The aim of this project is to develop and deploy AI software on the DJI Tello dr
 Tested with Python 3.6, but it also may be compatabile with other versions.
 
 ## Requirements
-- TensorFlow Object Detection API
-- Python >= 3.6
-- OpenCV 4
-- [DJI Tello Drone](https://store.dji.com/uk/shop/tello-series)
+- Software
+  - TensorFlow Object Detection API
+  - Python >= 3.6
+  - OpenCV 4
+  - [Tello SDK](https://github.com/damiafuentes/DJITelloPy)
+- Hardware
+    - [DJI Tello Drone](https://store.dji.com/uk/shop/tello-series)
 
 ## Usage
 - Install and train your object detection model using instruction from [here](https://tensorflow-object-detection-api-tutorial.readthedocs.io/en/latest/training.html#)
