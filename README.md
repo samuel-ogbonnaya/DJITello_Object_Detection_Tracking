@@ -144,6 +144,5 @@ def return_coordinates(
 - Fail safes etc will have to be incorporated into the application
 - See this [project](link)
 
-## Author
-Sam Ogbonnaya
-Also thanks to Damia Fuentes for his [Tello SDK](https://github.com/damiafuentes/DJITelloPy)
+## Resources
+Thanks to Damia Fuentes for his [Tello SDK](https://github.com/damiafuentes/DJITelloPy)
