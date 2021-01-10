@@ -18,7 +18,7 @@ Tested with Python 3.6, but it also may be compatabile with other versions.
 
 ## Usage
 - Install and train your object detection model using instruction from [here](https://tensorflow-object-detection-api-tutorial.readthedocs.io/en/latest/training.html#)
-- Add in the follwoing function into the visualisation_utils.py in the utils folder of the TF API:
+- Add in the following function into the visualisation_utils.py in the utils folder of the TF API:
 ```
 def return_coordinates(
     image,
@@ -142,7 +142,7 @@ def return_coordinates(
 ## Next Steps
 - The next key step is obtaining better hardware i.e. Drone with camera gimbal for tilting.
 - Fail safes etc will have to be incorporated into the application
-- See this [project](link)
+- See this [project](Test drone controller capabilities (take-off, landing etc) using Olympe)
 
 ## Resources
 Thanks to Damia Fuentes for his [Tello SDK](https://github.com/damiafuentes/DJITelloPy)
