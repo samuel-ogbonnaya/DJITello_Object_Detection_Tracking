@@ -137,8 +137,7 @@ def return_coordinates(
 - Run the main.py script
 
 ## Demo
- - Drone Tracking on horizontal axis
- ![Drone Tracking on horizontal axis](demo/demo.gif)
+ [Drone Tracking on horizontal axis](demo/demo.gif)
 
 ## Limitations
 - The camera on the Tello Drone is fixed and therefore the drone cannot see underneath itself. This limits the field of vision of tracking.
