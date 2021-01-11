@@ -136,8 +136,11 @@ def return_coordinates(
 - Ensure the ball is in front of the tello drone camera before take-off
 - Run the main.py script
 
-## Demo
+### Horizontal Axis Demo
  ![Drone Tracking on horizontal axis](demo/demo.gif)
+ 
+### Vertical Axis Demo
+ ![Drone Tracking on vertical axis](demo/demo_v1.gif)
 
 ## Limitations
 - The camera on the Tello Drone is fixed and therefore the drone cannot see underneath itself. This limits the field of vision of tracking.
