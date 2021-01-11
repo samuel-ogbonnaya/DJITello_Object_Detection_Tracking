@@ -10,6 +10,9 @@ The aim of this project is to develop and deploy AI software on the DJI Tello dr
 
 Tested with Python 3.6, but it also may be compatabile with other versions.
 
+## Demo
+ ![Drone Tracking on vertical axis](demo/demo_v1.gif)
+
 ## Requirements
 - Software
   - TensorFlow Object Detection API
@@ -135,12 +138,6 @@ def return_coordinates(
 - Connect to the a tello drone via wifi
 - Ensure the ball is in front of the tello drone camera before take-off
 - Run the main.py script
-
-### Horizontal Axis Demo
- ![Drone Tracking on horizontal axis](demo/demo.gif)
- 
-### Vertical Axis Demo
- ![Drone Tracking on vertical axis](demo/demo_v1.gif)
 
 ## Limitations
 - The camera on the Tello Drone is fixed and therefore the drone cannot see underneath itself. This limits the field of vision of tracking.
